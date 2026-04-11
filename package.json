@@ -1,0 +1,27 @@
+{
+  "name": "community-domo-helix",
+  "version": "1.0.0",
+  "description": "Domo platform tools for AI coding agents — CLI and MCP interfaces",
+  "type": "module",
+  "bin": {
+    "domo-helix": "dist/cli/index.js",
+    "domo-helix-mcp": "dist/mcp/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "keywords": ["domo", "cli", "mcp", "ai-agent", "claude", "cortex", "analytics", "bi"],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "commander": "^13.0.0",
+    "@modelcontextprotocol/sdk": "^1.12.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0"
+  }
+}
