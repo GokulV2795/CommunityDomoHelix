@@ -206,6 +206,7 @@ src/
 
 ## Related Projects
 
+- [domo-ai-vibe-rules](https://github.com/BFullenkampDomo/domo-ai-vibe-rules) — Community AI skills and rules for Domo
 - [CommunityDomoCLIHelix](https://github.com/BFullenkampDomo/CommunityDomoCLIHelix) — Previous CLI-only version (archived)
 - [CommunityDomoMCPHelix](https://github.com/BFullenkampDomo/CommunityDomoMCPHelix) — Previous MCP-only version (archived)
 - [Ryuu CLI](https://www.npmjs.com/package/ryuu) — Official Domo developer CLI (`domo login`, `domo publish`)
