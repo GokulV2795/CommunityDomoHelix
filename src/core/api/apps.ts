@@ -8,6 +8,34 @@ export async function listApps(auth: DomoAuth, opts: { limit?: number } = {}): P
   return ok(await res.json());
 }
 
+/**
+ * List App Studio apps with only the fields needed for discovery.
+ * The API may ignore its limit parameter, so enforce the limit locally.
+ */
+export async function listAppSummaries(
+  auth: DomoAuth,
+  opts: { limit?: number } = {}
+): Promise<DomoResult> {
+  const result = await listApps(auth, opts);
+  if (!result.ok) return result;
+
+  if (!Array.isArray(result.data)) return ok(result.data);
+
+  const limit = Math.max(0, Math.floor(opts.limit ?? 50));
+
+  return ok(
+    result.data.slice(0, limit).map((item: Record<string, unknown>) => ({
+      dataAppId: item.dataAppId,
+      title: item.title,
+      description: item.description,
+      created: item.created,
+      lastUpdated: item.lastUpdated,
+      enabled: item.enabled,
+      canEdit: item.canEdit,
+    }))
+  );
+}
+
 export async function createApp(
   auth: DomoAuth,
   opts: { title: string; description?: string }

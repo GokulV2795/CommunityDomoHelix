@@ -7,8 +7,18 @@ export async function listCustomApps(
   opts: { limit?: number; offset?: number } = {}
 ): Promise<DomoResult> {
   const res = await auth.fetch(
-    `/api/content/v1/custom-apps?limit=${opts.limit ?? 50}&offset=${opts.offset ?? 0}`
+    "/api/apps/v1/designs?deleted=false&checkAdminAuthority=false"
   );
+
   if (!res.ok) return fail(res);
-  return ok(await res.json());
+
+  const data: unknown = await res.json();
+
+  if (Array.isArray(data)) {
+    const offset = Math.max(0, Math.floor(opts.offset ?? 0));
+    const limit = Math.max(0, Math.floor(opts.limit ?? 50));
+    return ok(data.slice(offset, offset + limit));
+  }
+
+  return ok(data);
 }

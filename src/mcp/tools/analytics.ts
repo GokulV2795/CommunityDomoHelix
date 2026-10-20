@@ -1,11 +1,11 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import type { DomoAuth } from "../../core/auth/index.js";
-import { listCards, getCardDetails, getCardData, createCard, updateCard, validateBeastmode, createBeastmode, listApps, createApp, getApp, updateApp, addAppView, updateAppNavigation, getLayoutStack, lockLayout, updateLayout, unlockLayout, listPages } from "../../core/api/index.js";
+import { listCards, getCardDetails, getCardData, createCard, updateCard, validateBeastmode, createBeastmode, listApps, listAppSummaries, createApp, getApp, updateApp, addAppView, updateAppNavigation, getLayoutStack, lockLayout, updateLayout, unlockLayout, listPages } from "../../core/api/index.js";
 import { toMcpResponse } from "../output.js";
 
 export function registerAnalyticsTools(server: McpServer, auth: DomoAuth): void {
-  // ── Cards ───────────────────────────────────────────────────────────
+  // â”€â”€ Cards â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   server.tool(
     "domo_page_cards",
@@ -37,12 +37,12 @@ export function registerAnalyticsTools(server: McpServer, auth: DomoAuth): void 
 
   server.tool(
     "domo_card_update",
-    "Update an existing card's definition (full replacement — GET first).",
+    "Update an existing card's definition (full replacement â€” GET first).",
     { cardId: z.string().describe("The card ID"), body: z.string().describe("Full updated card body JSON") },
     async ({ cardId, body }) => toMcpResponse(await updateCard(auth, cardId, JSON.parse(body)))
   );
 
-  // ── BeastMode ───────────────────────────────────────────────────────
+  // â”€â”€ BeastMode â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   server.tool(
     "domo_beastmode_validate",
@@ -58,13 +58,13 @@ export function registerAnalyticsTools(server: McpServer, auth: DomoAuth): void 
     async (args) => toMcpResponse(await createBeastmode(auth, args))
   );
 
-  // ── App Studio ──────────────────────────────────────────────────────
+  // â”€â”€ App Studio â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   server.tool(
     "domo_app_list",
-    "List App Studio apps in the Domo instance.",
-    { limit: z.number().optional().describe("Max results (default 50)") },
-    async ({ limit }) => toMcpResponse(await listApps(auth, { limit }))
+    "List App Studio apps with concise metadata. Use domo_app_get for full details.",
+    { limit: z.number().int().min(0).max(200).optional().describe("Maximum results (default 50)") },
+    async ({ limit }) => toMcpResponse(await listAppSummaries(auth, { limit }))
   );
 
   server.tool(
@@ -83,7 +83,7 @@ export function registerAnalyticsTools(server: McpServer, auth: DomoAuth): void 
 
   server.tool(
     "domo_app_update",
-    "Update an App Studio app (full replacement — GET first, partial updates cause 400).",
+    "Update an App Studio app (full replacement â€” GET first, partial updates cause 400).",
     { dataAppId: z.string().describe("The app ID"), body: z.string().describe("Full app object JSON") },
     async ({ dataAppId, body }) => toMcpResponse(await updateApp(auth, dataAppId, JSON.parse(body)))
   );
@@ -97,12 +97,12 @@ export function registerAnalyticsTools(server: McpServer, auth: DomoAuth): void 
 
   server.tool(
     "domo_app_navigation_update",
-    "Update App Studio app navigation (must send FULL array — GET first).",
+    "Update App Studio app navigation (must send FULL array â€” GET first).",
     { dataAppId: z.string().describe("The app ID"), navigation: z.string().describe("Full navigation array JSON") },
     async ({ dataAppId, navigation }) => toMcpResponse(await updateAppNavigation(auth, dataAppId, JSON.parse(navigation)))
   );
 
-  // ── Layout ──────────────────────────────────────────────────────────
+  // â”€â”€ Layout â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   server.tool(
     "domo_stack_get",
@@ -132,7 +132,7 @@ export function registerAnalyticsTools(server: McpServer, auth: DomoAuth): void 
     async ({ layoutId }) => toMcpResponse(await unlockLayout(auth, layoutId))
   );
 
-  // ── Pages (legacy) ─────────────────────────────────────────────────
+  // â”€â”€ Pages (legacy) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   server.tool(
     "domo_page_list",

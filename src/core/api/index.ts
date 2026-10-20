@@ -26,7 +26,7 @@ export { listCards, getCardDetails, getCardData, createCard, updateCard } from "
 export { validateBeastmode, createBeastmode } from "./beastmode.js";
 
 // App Studio
-export { listApps, createApp, getApp, updateApp, addAppView, updateAppNavigation } from "./apps.js";
+export { listApps, listAppSummaries, createApp, getApp, updateApp, addAppView, updateAppNavigation } from "./apps.js";
 export { getLayoutStack, lockLayout, updateLayout, unlockLayout } from "./layout.js";
 export { listPages } from "./pages.js";
 
